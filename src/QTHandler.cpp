@@ -2,6 +2,7 @@
 #include <QCoreApplication>
 #include <QMetaObject>
 #include <QDebug>
+#include "deviceCore.hpp"
 
 QTHandler* QTHandler::s_instance = nullptr;
 

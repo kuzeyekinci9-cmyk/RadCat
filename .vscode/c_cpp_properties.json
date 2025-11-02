@@ -8,7 +8,11 @@
                 "${workspaceFolder}/src/devices",
                 "${workspaceFolder}/src/devices/comps",
                 "${workspaceFolder}/src/Included",
-                "${env:ROOTSYS}/include"
+                "${env:ROOTSYS}/include",
+                "${env:QT_DIR}/include",
+                "${env:QT_DIR}/include/QtCore",
+                "${env:QT_DIR}/include/QtGui",
+                "${env:QT_DIR}/include/QtWidgets"
             ],
             "defines": [
                 "_DEBUG",

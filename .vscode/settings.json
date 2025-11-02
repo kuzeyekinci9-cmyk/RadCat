@@ -77,7 +77,8 @@
         "typeindex": "cpp",
         "chrono": "cpp",
         "iomanip": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "FTD2XX.H": "cpp"
     },
     "editor.codeLens": true,
     "C_Cpp.codeLens.enabled": true
