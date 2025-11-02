@@ -37,4 +37,5 @@
 *.dwo
 
 Build.bat
-CMakeLists
+CMakeLists.txt
+.vscode/
