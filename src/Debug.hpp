@@ -12,6 +12,20 @@ struct DebugClass {
         return instance;
     }
 
+    // Stringify any type
+    template<typename T>
+    std::string stringify(const T& v) {
+        if constexpr (requires { std::ostringstream{} << v; }) {
+            std::ostringstream oss;
+            oss << v;
+            return oss.str();
+        } else if constexpr (requires { std::to_string(v); }) {
+            return std::to_string(v);
+        } else {
+            return "[unprintable type]";
+        }
+    }
+
     int debugLevel; // 0=none, 1=errors, 2=warnings, 3=info
 
     // ANSI color codes
@@ -56,29 +70,31 @@ struct DebugClass {
     inline void Warn(const std::string& msg, int LinesBeforeMessage=1)   { if(debugLevel >= 2) print("[WARNING]:", msg, Color::YELLOW, false, LinesBeforeMessage); }
     inline void Error(const std::string& msg, int LinesBeforeMessage=1)  { if(debugLevel >= 1) print("[ERROR]:", msg, Color::RED, true, LinesBeforeMessage); }
 
+
+    
     //Templated function for any type
-    template<typename T>
-    inline void Log(const std::string& prefix, const T& msg, int LinesBeforeMessage=1) {
+    template<typename... Args> 
+    inline void Log(const Args&... args) {
         if (debugLevel < 3) return;
         std::ostringstream oss;
-        oss << prefix << " " << msg;
-        Log(oss.str(), LinesBeforeMessage);
+        ((oss << stringify(args)), ...);
+        Log(oss.str());
     }
 
-    template<typename T>
-    inline void Warn(const std::string& prefix, const T& msg, int LinesBeforeMessage=1) {
+    template<typename... Args> 
+    inline void Warn(const Args&... args) {
         if (debugLevel < 2) return;
         std::ostringstream oss;
-        oss << prefix << " " << msg;
-        Warn(oss.str(), LinesBeforeMessage);
+        ((oss << stringify(args)), ...);
+        Warn(oss.str());
     }
 
-    template<typename T>
-    inline void Error(const std::string& prefix, const T& msg, int LinesBeforeMessage=1) {
+    template<typename... Args> 
+    inline void Error(const Args&... args) {
         if (debugLevel < 1) return;
         std::ostringstream oss;
-        oss << prefix << " " << msg;
-        Error(oss.str(), LinesBeforeMessage);
+        ((oss << stringify(args)), ...);
+        Error(oss.str());
     }
 
 };
