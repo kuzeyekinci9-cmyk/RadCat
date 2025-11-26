@@ -4,6 +4,8 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <type_traits>
+#include <concepts>
 
 struct DebugClass {
 
@@ -26,7 +28,7 @@ struct DebugClass {
         }
     }
 
-    int debugLevel; // 0=none, 1=errors, 2=warnings, 3=info
+    constexpr static int debugLevel = 3; // 0=none, 1=errors, 2=warnings, 3=info
 
     // ANSI color codes
     enum class Color { DEFAULT, RED, YELLOW, GREEN, CYAN, WHITE };
@@ -66,16 +68,14 @@ struct DebugClass {
     }
 
     // Logging functions
-    inline void Log(const std::string& msg, int LinesBeforeMessage=1)    { if(debugLevel >= 3) print("[DEBUG]:", msg, Color::WHITE, false, LinesBeforeMessage); }
-    inline void Warn(const std::string& msg, int LinesBeforeMessage=1)   { if(debugLevel >= 2) print("[WARNING]:", msg, Color::YELLOW, false, LinesBeforeMessage); }
-    inline void Error(const std::string& msg, int LinesBeforeMessage=1)  { if(debugLevel >= 1) print("[ERROR]:", msg, Color::RED, true, LinesBeforeMessage); }
+    inline void Log(const std::string& msg, int LinesBeforeMessage=1)    { if constexpr (debugLevel >= 3) print("[DEBUG]:", msg, Color::WHITE, false, LinesBeforeMessage); }
+    inline void Warn(const std::string& msg, int LinesBeforeMessage=1)   { if constexpr (debugLevel >= 2) print("[WARNING]:", msg, Color::YELLOW, false, LinesBeforeMessage); }
+    inline void Error(const std::string& msg, int LinesBeforeMessage=1)  { if constexpr (debugLevel >= 1) print("[ERROR]:", msg, Color::RED, true, LinesBeforeMessage); }
 
-
-    
     //Templated function for any type
     template<typename... Args> 
     inline void Log(const Args&... args) {
-        if (debugLevel < 3) return;
+        if constexpr (debugLevel < 3) return;
         std::ostringstream oss;
         ((oss << stringify(args)), ...);
         Log(oss.str());
@@ -83,7 +83,7 @@ struct DebugClass {
 
     template<typename... Args> 
     inline void Warn(const Args&... args) {
-        if (debugLevel < 2) return;
+        if constexpr (debugLevel < 2) return;
         std::ostringstream oss;
         ((oss << stringify(args)), ...);
         Warn(oss.str());
@@ -91,7 +91,7 @@ struct DebugClass {
 
     template<typename... Args> 
     inline void Error(const Args&... args) {
-        if (debugLevel < 1) return;
+        if constexpr (debugLevel < 1) return;
         std::ostringstream oss;
         ((oss << stringify(args)), ...);
         Error(oss.str());

@@ -1,10 +1,9 @@
-#include "app.hpp"
 #include <QApplication>
-#include <iostream>
+#include "MainWindow.hpp"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
-    Controller controller;
-    cout << "Application started." << endl;
+    MainWindow mainWindow;
+    mainWindow.show();
     return app.exec();
 }

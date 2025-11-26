@@ -18,18 +18,18 @@
 #endif
 
 // Move debug constant here
-static constexpr bool debug = true;
+static constexpr bool debug = false;
 
 UDPHandler::UDPHandler() {
 #ifdef _WIN32
     socket_fd = INVALID_SOCKET;  // Initialize first
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-        Debug.Error("WSAStartup failed.");
+        Debug.Error("WSA Startup failed.");
         wsa_initialized = false;
         return;
     }else{
-        Debug.Log("WSAStartup successful.");
+        Debug.Log("WSA Startup successful.");
         wsa_initialized = true;
     }
 #else
