@@ -5,8 +5,10 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src",
-                "${workspaceFolder}/src/devices",
-                "${workspaceFolder}/src/devices/comps",
+                "${workspaceFolder}/src/Devices",
+                "${workspaceFolder}/src/CompHandlers",
+                "${workspaceFolder}/src/Devices/DeviceCoreSystems",
+                "${workspaceFolder}/src/Components",
                 "${workspaceFolder}/src/Included/Windows",
                 "${env:ROOTSYS}/include",
                 "${env:QT_DIR}/include",

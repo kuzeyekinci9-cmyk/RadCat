@@ -1,9 +1,13 @@
 #include "deviceHandler.hpp"
-#include "devices/deviceCore.hpp"
 #include "debug.hpp"
-#include "devices/comps/allComponents.hpp"
+#include "ftd2xx.h"
+#include "allComponents.hpp"
 
-
+void DeviceHandler::deviceLogicUpdate() {
+    for (auto& device : activeDevices) {
+        device->systemUpdate();
+    }
+}
 
 int DeviceHandler::FTDIScan() {
     if constexpr(debug) Debug.Log("Scanning for FTDI devices...");
@@ -18,7 +22,7 @@ int DeviceHandler::FTDIScan() {
     for (DWORD i = 0; i < numDevs; i++) {
 
         for (auto& device : activeDevices) {
-            auto* ftdiComp = static_cast<FTDIConnection*>(device->getComponent(typeid(FTDIConnection)));
+            auto* ftdiComp = device->systemGetComponent<FTDIConnection>();
             if (ftdiComp && ftdiComp->getFTDIIndex() == static_cast<int>(i)) {
                 if constexpr(debug) Debug.Log("FTDI device at index " + std::to_string(i) + " is already assigned to an active device. Skipping.");
                 continue;
@@ -51,7 +55,7 @@ int DeviceHandler::FTDIScan() {
             
             if (isMatch) { if constexpr(debug) Debug.Log("MATCH FOUND! Device '" + deviceName + "' matches FTDI device '" + foundDeviceName + "' (Serial: " + foundSerial + ")");
                 auto matchedDevice = entry.creator();
-                auto* ftdiComp = static_cast<FTDIConnection*>(matchedDevice->getComponent(typeid(FTDIConnection)));
+                auto* ftdiComp = matchedDevice->systemGetComponent<FTDIConnection>();
                 if (ftdiComp == nullptr) {
                     Debug.Error("FTDIConnection component not found in device created for " + deviceName + ", this is a fatal error. Restart the program.");
                     continue;

@@ -1,6 +1,6 @@
 #pragma once
 #include "deviceCore.hpp"
-#include "comps/FTDIConnection.hpp"
+#include "FTDIConnection.hpp"
 
 class MiniXDevice : public BaseDevice<FTDIConnection> {
 public:
@@ -47,7 +47,7 @@ private:
     void deactivateTemperatureSensor(unsigned char* tx, int& pos, unsigned char& HighByteHiLowState);
 
     // Minix Components
-    FTDIConnection& connection = getComponent<FTDIConnection>();
+    FTDIConnection& connection = getComponentRef<FTDIConnection>();
 
     // Minix-specific variables
     bool hvOn = false;

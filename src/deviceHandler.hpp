@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "devices/deviceCore.hpp"
-#include "ftd2xx.h"
+#include "deviceCore.hpp"
 
 
 class DeviceHandler {
@@ -12,5 +11,6 @@ public:
 
 
     int FTDIScan();
+    void deviceLogicUpdate();
     
 };

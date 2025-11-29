@@ -3,7 +3,7 @@
 #include "debug.hpp"
 #include "utilities.hpp"
 
-REGISTER_DEVICE(MiniXDevice, "Mini-X Device");
+REGISTER_DEVICE(MiniXDevice,"Mini-X");
 using namespace std;
 using namespace Utilities;
 

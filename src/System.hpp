@@ -1,5 +1,6 @@
 #pragma once
 #include "udpHandler.hpp"
+#include "DeviceHandler.hpp"
 
 using namespace std;
 
@@ -7,8 +8,9 @@ class System{
 public:
     // Core Handlers
     UDPHandler udpHandler;
+    DeviceHandler deviceHandler;
 
-    System() : udpHandler() { if(systemInitializor()) isRunning = true; }
+    System() : udpHandler(), deviceHandler() { if(systemInitializor()) isRunning = true; }
     ~System(){}
 
     void run();
