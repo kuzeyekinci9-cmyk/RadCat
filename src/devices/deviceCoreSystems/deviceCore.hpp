@@ -33,7 +33,7 @@ public:
     virtual ~EmptyDevice() = default;
 
     // Device Info (to be filled by derived classes)
-    static inline const DeviceRegistry::RegistryEntry::DeviceInfo deviceInfo = {"Unset","Unset","Unset","Unset"};
+    static inline const DeviceRegistry::RegistryEntry::DeviceInfo deviceInfo;
 
     // This function is called by the system whenever a device found in scan is to be connected.
     virtual bool connect() = 0;

@@ -48,7 +48,7 @@ bool FTDIConnection::openDevice(){
 
     deviceIsOpen = true;
     if constexpr (debug) Debug.Log("FTDI device opened successfully.");
-    session = FTDIHandler::instance().getSession(ftHandle, devInfo);
+    session = FTDIHandler::Instance().getSession(ftHandle, devInfo);
     FT_ResetDevice(ftHandle); // Reset device to ensure clean state
     FT_Purge(ftHandle, FT_PURGE_RX | FT_PURGE_TX); // Clear RX and TX buffers
     sleepMs(100); // Wait for device to stabilize

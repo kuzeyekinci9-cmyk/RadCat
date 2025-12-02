@@ -1,16 +1,20 @@
 #pragma once
+#include "CompHandlers/BaseComponentHandler.hpp"
 #include <ftd2xx.h>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
 
-class FTDIHandler {
+class FTDIHandler : public BaseComponentHandler {
 public:
     constexpr static bool debug = false;
-	static FTDIHandler& instance() {static FTDIHandler s_instance; return s_instance;} // Singleton Instance
+    bool initialize() override;
+    bool shutdown() override;
+	static FTDIHandler& Instance() {static FTDIHandler s_instance; return s_instance;} // Singleton Instance
 
     // ---- FTDI Methods ----
     int FTDIScan();
+    int getDeviceCount();
 
     class DeviceSession {
     public:

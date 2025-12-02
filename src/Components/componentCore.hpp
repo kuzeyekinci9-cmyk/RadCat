@@ -1,3 +1,4 @@
+#pragma once
 #define COMPONENT template<typename... Components> class BaseDevice; class EmptyDevice;
 
 class EmptyDevice;

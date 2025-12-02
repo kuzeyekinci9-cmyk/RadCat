@@ -19,10 +19,12 @@ public:
         std::vector<std::type_index> componentTypes;
         // You can keep DeviceInfo as is, but you may want to move it to a common header if needed
         struct DeviceInfo {
-            std::string deviceName;
-            std::string serialNumber;
-            std::string model;
-            std::string firmwareVersion;
+            std::string deviceName = "Unset";
+            uint16_t vid = 0;
+            uint16_t pid = 0;
+            std::string serialNumber = "Unset";
+            std::string model = "Unset";
+            std::string firmwareVersion = "Unset";
         } deviceInfo;
     };
 

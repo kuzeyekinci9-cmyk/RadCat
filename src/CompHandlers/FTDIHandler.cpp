@@ -6,6 +6,16 @@
 using namespace Utilities;
 
 
+bool FTDIHandler::initialize() {
+   
+    return true;
+}
+
+bool FTDIHandler::shutdown() {
+    
+    return true;
+}
+
 // Direct Data Transfer (Non-thread-safe, Only For Main Systems To Use)
 FT_STATUS FTDIHandler::sendData(FT_HANDLE deviceHandle, const unsigned char* data, DWORD size) {
     if (!data) { Debug.Error("FTDI sendData: null data pointer"); return FT_INVALID_PARAMETER; }
@@ -149,4 +159,14 @@ bool FTDIHandler::DeviceSession::connectionStatus() {
     std::lock_guard<std::mutex> rxLock(*rxMutex);
     FT_STATUS status = FT_GetQueueStatus(ftHandle, &rxBytes);
     return (status == FT_OK);
+}
+
+int FTDIHandler::getDeviceCount() {
+    if constexpr(debug) Debug.Log("FTDIHandler: Scanning for FTDI devices...");
+    FT_STATUS status; DWORD numDevs;
+    status = FT_CreateDeviceInfoList(&numDevs);
+    if (status != FT_OK) {Debug.Error("Error getting device list: " , status); return -1;}
+    if (numDevs == 0) {Debug.Warn("No FTDI devices found."); return 0;}
+    if constexpr(debug) Debug.Log("Number of FTDI devices found: " , numDevs);
+    return static_cast<int>(numDevs);
 }

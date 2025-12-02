@@ -10,7 +10,9 @@ public:
     const static bool debug = false;
 
 
-    int FTDIScan();
+    void ftdiScan();
+    void libUsbScan();
+    void deviceScan();
     void deviceLogicUpdate();
     
 };

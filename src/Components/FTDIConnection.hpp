@@ -27,7 +27,7 @@ public:
 private:
     friend class FTDIHandler;
     friend class DeviceHandler;
-    FTDIHandler& handler = FTDIHandler::instance();
+    FTDIHandler& handler = FTDIHandler::Instance();
     std::shared_ptr<FTDIHandler::DeviceSession> session;
     FT_DEVICE_LIST_INFO_NODE devInfo;
     static constexpr bool debug = false; //Debug flag
