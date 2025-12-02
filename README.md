@@ -36,7 +36,7 @@ RadCat has a growing [**Wiki**](https://github.com/yagizdkurt/RadCat/wiki) full 
 
 | Section | Description |
 |----------|--------------|
-| 🧭 [Overview](https://github.com/yagizdkurt/RadCat/wiki/Overview) | Learn what RadCat is and how it works |
+| 🧭 [Overview](https://github.com/yagizdkurt/RadCat/wiki) | Learn what RadCat is and how it works |
 | ⚙️ [Getting Started](https://github.com/yagizdkurt/RadCat/wiki/Getting-Started) | Install, configure, and connect your first device |
 | 🧩 [Components](https://github.com/yagizdkurt/RadCat/wiki/ComponentCore) | See available modular components |
 | 🧠 [Creating New Devices](https://github.com/yagizdkurt/RadCat/wiki/Device-Core) | Learn to build your own device definitions |
