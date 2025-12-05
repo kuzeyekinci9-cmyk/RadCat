@@ -41,29 +41,30 @@ void DeviceHandler::libUsbScan() {
 
         // Check all registered devices for potential LibUsb matches
         // But check VID first bcs it's the easiest
-        for (const auto& [deviceName, entry] : UsbDevices) {
-            if (entry.deviceInfo.vid != vid) continue; 
+        for (const auto& entry : UsbDevices) {
+            const DeviceRegistry::RegistryEntry::DeviceInfo& deviceInfo = entry->deviceInfo;
+            
+            if (deviceInfo.vid != vid) continue; 
             bool isMatch = false;
 
             // PID Check
             uint16_t pid = info.descriptor.idProduct;
-            if (entry.deviceInfo.pid != 0 && entry.deviceInfo.pid == pid) { isMatch = true; }
+            if (deviceInfo.pid != 0 && deviceInfo.pid == pid) { isMatch = true; }
 
             //TODO: Serial Number Check
 
             // Name Check
             //TODO: upper lover case insensitive comparison 
-            std::string foundDeviceName = entry.deviceInfo.deviceName;
-            if(foundDeviceName.find(deviceName) != std::string::npos || deviceName.find(foundDeviceName) != std::string::npos) isMatch = true;
+            std::string foundDeviceName = deviceInfo.deviceName;
+            if(foundDeviceName.find(deviceInfo.deviceName) != std::string::npos || deviceInfo.deviceName.find(foundDeviceName) != std::string::npos) isMatch = true;
 
             // Finalize Match
             if (isMatch) {
-                if constexpr(debug) Debug.Log("MATCH FOUND! Device : " , deviceName);
-                auto matchedDevice = entry.creator();
+                if constexpr(debug) Debug.Log("MATCH FOUND! Device : " , deviceInfo.deviceName);
+                auto matchedDevice = entry->creator();
                 auto* usbComp = matchedDevice->systemGetComponent<UsbConnection>();
 
-                if(!libUsbHandler.deviceMatch(info, *usbComp)) Debug.Error("Failed to match device " + deviceName);
-
+                if(!libUsbHandler.deviceMatch(info, *usbComp)) Debug.Error("Failed to match device " + deviceInfo.deviceName);
                 activeDevices.push_back(std::move(matchedDevice));
                 break;
             }
@@ -96,15 +97,15 @@ void DeviceHandler::ftdiScan() {
         if constexpr(debug) Debug.Log("Found FTDI device: " + std::string(devInfo.Description) + " (Serial: " + std::string(devInfo.SerialNumber) + ")");
 
         // Check all registered devices for potential FTDI matches
-        for (const auto& [deviceName, entry] : FTDIDevices) {
-            if constexpr(debug) Debug.Log("Checking registered device: " + deviceName + " against FTDI device: " + std::string(devInfo.Description));
+        for (const auto& entry : FTDIDevices) {
+            if constexpr(debug) Debug.Log("Checking registered device: " + entry->deviceInfo.deviceName + " against FTDI device: " + std::string(devInfo.Description));
             bool isMatch = false;
 
-            if (entry.deviceInfo.serialNumber == std::string(devInfo.SerialNumber)) { isMatch = true; } //Serial Check
+            if (entry->deviceInfo.serialNumber == std::string(devInfo.SerialNumber)) { isMatch = true; } //Serial Check
             
             std::string foundDeviceName = std::string(devInfo.Description); //Name Check
             std::string foundSerial = std::string(devInfo.SerialNumber);
-            std::string deviceNameLower = deviceName;
+            std::string deviceNameLower = entry->deviceInfo.deviceName;
             std::string foundDeviceNameLower = foundDeviceName;
             std::transform(deviceNameLower.begin(), deviceNameLower.end(), deviceNameLower.begin(), ::tolower);
             std::transform(foundDeviceNameLower.begin(), foundDeviceNameLower.end(), foundDeviceNameLower.begin(), ::tolower);
@@ -112,8 +113,8 @@ void DeviceHandler::ftdiScan() {
                 deviceNameLower.find(foundDeviceNameLower) != std::string::npos) isMatch = true;
             
             if (isMatch) { 
-                if constexpr(debug) Debug.Log("MATCH FOUND! Device '", deviceName , "' matches FTDI device '", foundDeviceName);
-                auto matchedDevice = entry.creator();
+                if constexpr(debug) Debug.Log("MATCH FOUND! Device '", entry->deviceInfo.deviceName , "' matches FTDI device '", foundDeviceName);
+                auto matchedDevice = entry->creator();
                 auto* ftdiComp = matchedDevice->systemGetComponent<FTDIConnection>();
                 ftdiComp->setFTDIIndex(static_cast<int>(i));
                 ftdiComp->setDevInfo(devInfo);
