@@ -79,20 +79,9 @@ public:
         return out;
     }
 
-<<<<<<< Updated upstream
     template<typename... QueryComponents> 
     static std::vector<const RegistryEntry*> getRegisteredDevicesWithComponents() {
         std::vector<const RegistryEntry*> out;
-=======
-    // Returns a list of (name, RegistryEntry*) for registered device types that provide
-    // all QueryComponents. The returned pointers are non-owning pointers into the
-    // internal registry map — they remain valid as long as the registry entry is not erased.
-    // If your application may modify the registry at runtime, do not store these pointers
-    // long-term or protect registry mutations with a mutex.
-    template<typename... QueryComponents>
-    static std::vector<std::pair<std::string, const RegistryEntry*>> getRegisteredDevicesWithComponents() {
-        std::vector<std::pair<std::string, const RegistryEntry*>> out;
->>>>>>> Stashed changes
         std::vector<std::type_index> needed = { std::type_index(typeid(QueryComponents))... };
         for (const auto& [name, entry] : registry()) {
             bool allFound = true;
@@ -102,18 +91,9 @@ public:
                     break;
                 }
             }
-<<<<<<< Updated upstream
             if (allFound) out.emplace_back(&entry);
-=======
-            if (allFound) out.emplace_back(name, &entry);
->>>>>>> Stashed changes
         }
         return out;
     }
 
-<<<<<<< Updated upstream
-=======
-    
-
->>>>>>> Stashed changes
 };
