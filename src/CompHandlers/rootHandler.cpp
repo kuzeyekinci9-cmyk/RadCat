@@ -1,9 +1,5 @@
 #include "RootHandler.hpp"
 
-#include "TH1F.h"
-#include "TH2F.h"
-#include "TGraph.h"
-#include "TCanvas.h"
 #include "TStyle.h"
 #include "TObject.h"
 

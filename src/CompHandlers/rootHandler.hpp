@@ -8,6 +8,8 @@
 #include <memory>
 #include <iostream>
 #include <type_traits> 
+#include <concepts>
+#include <type_traits>
 
 #include "TH1.h"
 #include "TH2.h"
@@ -17,8 +19,8 @@
 #include "TROOT.h"
 #include "Debug.hpp"
 
-const char APL = "APL";
-const char COLZ ="COLZ"
+const char APL[] = "APL";
+const char COLZ[] = "COLZ";
 
 // ============================================================================
 // STRUCTURES
@@ -37,7 +39,13 @@ struct DrawOptions {
 // TEMPLATE DEFINITIONS
 // ============================================================================
 
-template <typename T>
+// Restrict types to ROOT plotting objects
+template<typename T>
+concept RootPlots = std::same_as<std::remove_cvref_t<T>, TH1F>
+    || std::same_as<std::remove_cvref_t<T>, TH2F>
+    || std::same_as<std::remove_cvref_t<T>, TGraph>;
+
+template <RootPlots T>
 struct DrawableObject {
     std::shared_ptr<T> rootObj; // Shared pointer to ROOT object of type T
     DrawOptions options; 
@@ -63,7 +71,7 @@ struct DrawableObject {
         DrawableObject<T> newObj(clonePtr);
         // Copy the drawing options
         newObj.options = this->options;
-        return newObj;      
+        return newObj;
     }
 
     bool isValid() const { return rootObj != nullptr; }
