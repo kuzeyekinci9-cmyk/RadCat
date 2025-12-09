@@ -18,64 +18,10 @@
 #include "TDirectory.h"
 #include "TROOT.h"
 #include "Debug.hpp"
+#include "RootComponent.hpp"
 
 const char APL[] = "APL";
 const char COLZ[] = "COLZ";
-
-// ============================================================================
-// STRUCTURES
-// ============================================================================
-
-struct DrawOptions {
-    bool normalized = false;
-    bool logY = false;
-    bool logX = false;
-    bool logZ = false;
-    int rebin = 1;
-    std::string title;
-};
-
-// ============================================================================
-// TEMPLATE DEFINITIONS
-// ============================================================================
-
-// Restrict types to ROOT plotting objects
-template<typename T>
-concept RootPlots = std::same_as<std::remove_cvref_t<T>, TH1F>
-    || std::same_as<std::remove_cvref_t<T>, TH2F>
-    || std::same_as<std::remove_cvref_t<T>, TGraph>;
-
-template <RootPlots T>
-struct DrawableObject {
-    std::shared_ptr<T> rootObj; // Shared pointer to ROOT object of type T
-    DrawOptions options; 
-
-    DrawableObject(T* obj = nullptr) {
-        if (obj) rootObj = std::shared_ptr<T>(obj);
-    } // Constructor
-
-    DrawableObject<T>& setLogY(bool enable = true) { options.logY = enable; return *this; }
-    DrawableObject<T>& setLogX(bool enable = true) { options.logX = enable; return *this; }
-    DrawableObject<T>& setLogZ(bool enable = true) { options.logZ = enable; return *this; }
-    DrawableObject<T>& setRebin(int factor) { options.rebin = factor; return *this; }
-    DrawableObject<T>& setNormalize(bool enable = true) { options.normalized = enable; return *this; }
-    DrawableObject<T>& setTitle(const std::string& t) { options.title = t; return *this; }
-
-    // Clone the drawable object with its options
-    DrawableObject<T> clone() const {
-        if (!isValid()) return DrawableObject<T>(nullptr);  
-        // ROOT's Clone returns a TObject*, so we need to cast it back to T*
-        T* clonePtr = static_cast<T*>(rootObj->Clone()); 
-        
-        // Create a new DrawableObject with the cloned object
-        DrawableObject<T> newObj(clonePtr);
-        // Copy the drawing options
-        newObj.options = this->options;
-        return newObj;
-    }
-
-    bool isValid() const { return rootObj != nullptr; }
-};
 
 class RootHandler {
 public:
@@ -154,9 +100,6 @@ public:
     }
 
 private:
-    // ========================================================================
-    // PRIVATE MEMBERS FOR SINGLETON
-    // ========================================================================
     RootHandler();
     ~RootHandler();         
     RootHandler(const RootHandler&) = delete;
