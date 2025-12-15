@@ -31,5 +31,5 @@
 Build.bat
 CMakeLists.txt
 .vscode/
-Build/
-Dist/
+build/
+dist/

@@ -4,16 +4,23 @@
 #include <memory>
 #include <mutex>
 #include <unordered_map>
+#include <vector>
 
 class FTDIHandler : public BaseComponentHandler {
 public:
     constexpr static bool debug = false;
+
+    struct ScannedDeviceInfo {
+        FT_DEVICE_LIST_INFO_NODE devInfo;
+        int scanIndex;
+    };
+    
     bool initialize() override;
     bool shutdown() override;
 	static FTDIHandler& Instance() {static FTDIHandler s_instance; return s_instance;} // Singleton Instance
 
     // ---- FTDI Methods ----
-    int FTDIScan();
+    std::vector<ScannedDeviceInfo> scanDevices();
     int getDeviceCount();
 
     class DeviceSession {
@@ -56,7 +63,6 @@ private:
     // Direct Data Transfer (Non-thread-safe, Only For Main Systems To Use)
     FT_STATUS sendData(FT_HANDLE deviceHandle, const unsigned char* data, DWORD size);
     FT_STATUS receiveData(FT_HANDLE deviceHandle, unsigned char* buffer, DWORD size, DWORD& bytesRead);
-    // Friend classes here to use above methods if needed
 
     std::mutex mapMutex;
     struct SyncPair { std::shared_ptr<std::mutex> tx, rx; };

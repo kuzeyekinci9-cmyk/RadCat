@@ -17,7 +17,6 @@ public:
     struct RegistryEntry {
         std::function<std::unique_ptr<EmptyDevice>()> creator;
         std::vector<std::type_index> componentTypes;
-        // You can keep DeviceInfo as is, but you may want to move it to a common header if needed
         struct DeviceInfo {
             std::string deviceName = "Unset";
             uint16_t vid = 0;
@@ -81,8 +80,8 @@ public:
     }
 
     template<typename... QueryComponents> 
-    static std::vector<std::pair<std::string, RegistryEntry>> getRegisteredDevicesWithComponents() {
-        std::vector<std::pair<std::string, RegistryEntry>> out;
+    static std::vector<const RegistryEntry*> getRegisteredDevicesWithComponents() {
+        std::vector<const RegistryEntry*> out;
         std::vector<std::type_index> needed = { std::type_index(typeid(QueryComponents))... };
         for (const auto& [name, entry] : registry()) {
             bool allFound = true;
@@ -92,8 +91,9 @@ public:
                     break;
                 }
             }
-            if (allFound) out.emplace_back(name, entry);
+            if (allFound) out.emplace_back(&entry);
         }
         return out;
     }
+
 };

@@ -170,3 +170,23 @@ int FTDIHandler::getDeviceCount() {
     if constexpr(debug) Debug.Log("Number of FTDI devices found: " , numDevs);
     return static_cast<int>(numDevs);
 }
+
+std::vector<FTDIHandler::ScannedDeviceInfo> FTDIHandler::scanDevices() {
+    if constexpr(debug) Debug.Log("FTDIHandler: Scanning for FTDI devices...");
+    FT_STATUS status; DWORD numDevs;
+
+    status = FT_CreateDeviceInfoList(&numDevs);
+    std::vector<ScannedDeviceInfo> scannedDevices;
+    if (status != FT_OK) {Debug.Error("Error getting device list: " , status); return scannedDevices;}
+    if (numDevs == 0) {Debug.Warn("No FTDI devices found."); return scannedDevices;}
+
+    for (DWORD i = 0; i < numDevs; i++) {
+        FT_DEVICE_LIST_INFO_NODE devInfo;
+        status = FT_GetDeviceInfoDetail(i, &devInfo.Flags, &devInfo.Type, &devInfo.ID, &devInfo.LocId, devInfo.SerialNumber, devInfo.Description, &devInfo.ftHandle);
+        if (status != FT_OK) {Debug.Error("Error getting device info for device " , i , ": " , status); continue;}
+        scannedDevices.push_back({devInfo, static_cast<int>(i)});
+        if constexpr(debug) Debug.Log("Found FTDI Device - Type: " , devInfo.Type , ", ID: " , devInfo.ID , ", Description: " , devInfo.Description);
+    }
+    
+    return scannedDevices;
+}

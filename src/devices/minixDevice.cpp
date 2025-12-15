@@ -124,6 +124,7 @@ bool MiniXDevice::setValue(const std::string& parameter, double value) {
 bool MiniXDevice::initialize() {
     if (!setupTemperatureSensor()) return false;
     if (!setupClockDivisor()) return false;
+    
 
     //setVoltage(0.0);
     //sleepMs(200);

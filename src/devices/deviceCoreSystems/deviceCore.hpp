@@ -50,9 +50,17 @@ public:
     // This function is called by the system to set a parameter on the device.
     virtual bool setValue(const std::string& parameter, double value) = 0;
 
-
+    // Placeholder function for setting up periodic tasks inside the device. This is not mandatory to implement.
+    // But if used, its a better place to setup periodic tasks. You can set up your tasks in constructor or initalize as well.
+    // However, this function is called once the device is fully constructed and all components are initialized which is safer.
     virtual void setupTasks(){}
+
+    // Indicates whether there are active periodic tasks. If set to false, the task scheduler is skipped for performance.
     bool tasksActive = false;
+
+    // Indicates whether the device has been initialized (connected successfully)
+    // This flag should be set to true once the device has successfully connected and is ready for operation.
+    bool isInitialized = false;
 
     // Component Access For Systems and Handlers (Not For Device Use). 
     // As a device programmer, if you need component access inside device, use getComponentRef<T>() instead of this.
@@ -155,6 +163,7 @@ private:
 
     // Device Logic Update - Not for device programmer use. Use update() instead.
     virtual void systemUpdate() override final {
+        if (!isInitialized) return;
         componentUpdate();
         update();
         if (!tasksActive) return;
