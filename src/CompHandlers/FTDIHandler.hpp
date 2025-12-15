@@ -1,5 +1,5 @@
 #pragma once
-#include "CompHandlers/BaseComponentHandler.hpp"
+#include "BaseComponentHandler.hpp"
 #include <ftd2xx.h>
 #include <memory>
 #include <mutex>

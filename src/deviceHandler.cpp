@@ -1,7 +1,7 @@
-#include "deviceHandler.hpp"
-#include "debug.hpp"
+#include "DeviceHandler.hpp"
+#include "Debug.hpp"
 #include "ftd2xx.h"
-#include "allComponents.hpp"
+#include "AllComponents.hpp"
 
 void DeviceHandler::deviceLogicUpdate() {
     for (auto& device : activeDevices) {

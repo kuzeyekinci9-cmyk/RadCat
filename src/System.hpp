@@ -1,5 +1,4 @@
 #pragma once
-#include "udpHandler.hpp"
 #include "DeviceHandler.hpp"
 
 using namespace std;
@@ -7,10 +6,9 @@ using namespace std;
 class System{
 public:
     // Core Handlers
-    UDPHandler udpHandler;
     DeviceHandler deviceHandler;
 
-    System() : udpHandler(), deviceHandler() { if(systemInitializor()) isRunning = true; }
+    System() : deviceHandler() { if(systemInitializor()) isRunning = true; }
     ~System(){}
 
     void run();
@@ -19,7 +17,7 @@ public:
     bool systemInitializor();
 
 
-    bool isRunning{false};
-    float elapsedMS{0.0f};
+    bool isRunning = false;
+    float elapsedMS = 0.0f;
 
 };

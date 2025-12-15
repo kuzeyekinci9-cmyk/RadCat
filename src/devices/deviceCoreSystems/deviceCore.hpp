@@ -7,8 +7,8 @@
 #include <typeindex>
 #include <algorithm>
 #include <chrono>
-#include "deviceRegistry.hpp"
-#include "deviceHandler.hpp"
+#include "DeviceRegistry.hpp"
+#include "DeviceHandler.hpp"
 
 
 // Device registration macro REGISTER_DEVICE(class, "Name")

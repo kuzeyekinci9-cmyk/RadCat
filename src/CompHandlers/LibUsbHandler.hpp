@@ -1,10 +1,10 @@
 #pragma once
-#include "included/libusb.h"
-#include "CompHandlers/BaseComponentHandler.hpp"
+#include "Included/libusb.h"
+#include "BaseComponentHandler.hpp"
 #include <vector>
 #include <string>
 #include "UsbConnection.hpp"
-#include "debug.hpp"
+#include "Debug.hpp"
 
 class LibUsbHandler : public BaseComponentHandler {
 public:

@@ -1,6 +1,5 @@
 #include "System.hpp"
 #include "Debug.hpp"
-#include "TimeManager.hpp"
 #include <stdlib.h>
 #include <string>
 #include <iostream>
@@ -15,8 +14,8 @@ bool System::systemInitializor() {
         Debug.Log("Initializing Data Handler...");
 
         Debug.Log("Initializing UDP Handler...");
-        if(udpHandler.start()){Debug.Log("UDP Handler Initialized Successfully.");} 
-        else {Debug.Error("UDP Handler Initialization Failed!"); CurrentStatus = false;}
+        //if(udpHandler.start()){Debug.Log("UDP Handler Initialized Successfully.");} 
+        //else {Debug.Error("UDP Handler Initialization Failed!"); CurrentStatus = false;}
 
         if (CurrentStatus){Debug.Log("All systems go!"); isRunning = true;}
         else{Debug.Error("System Initialization Failed!",5); isRunning = false;}
@@ -29,7 +28,7 @@ void System::run(){
 
 void System::stop() {
         isRunning = false;
-        udpHandler.stop();
+        //udpHandler.stop();
     }
 
 void System::logic(){

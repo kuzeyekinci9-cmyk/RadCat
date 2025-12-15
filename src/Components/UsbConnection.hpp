@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include "componentCore.hpp"
-#include "included/libusb.h"
+#include <vector>
+#include "ComponentCore.hpp"
+#include "Included/libusb.h"
 
 
 class LibUsbHandler;

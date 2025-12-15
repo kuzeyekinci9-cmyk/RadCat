@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "deviceCore.hpp"
+#include "DeviceCore.hpp"
 #include "FTDIHandler.hpp"
 #include "LibUsbHandler.hpp"
 

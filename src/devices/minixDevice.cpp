@@ -1,7 +1,7 @@
-#include "miniXDevice.hpp"
+#include "MiniXDevice.hpp"
 #include "ftd2xx.h"
-#include "debug.hpp"
-#include "utilities.hpp"
+#include "Debug.hpp"
+#include "Utilities.hpp"
 
 REGISTER_DEVICE(MiniXDevice,"Mini-X");
 using namespace std;
