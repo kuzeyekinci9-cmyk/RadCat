@@ -35,8 +35,6 @@ public:
     
     const static bool debug = false;
 
-    void ftdiScan();
-    void libUsbScan();
     void deviceScan();
     void deviceLogicUpdate();
 
@@ -46,5 +44,7 @@ public:
 private:
     LibUsbHandler& libUsbHandler = LibUsbHandler::Instance();
     FTDIHandler& ftdiHandler = FTDIHandler::Instance();
+    void ftdiScan();
+    void libUsbScan();
     
 };

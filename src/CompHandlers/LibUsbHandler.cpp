@@ -1,19 +1,14 @@
 #include "LibUsbHandler.hpp"
 #include "debug.hpp"
 
-LibUsbHandler::LibUsbHandler() {
-    int r = libusb_init(&ctx);
-    if (r < 0) Debug.Error("Failed to initialize libusb: " , r);
-}
-
 bool LibUsbHandler::initialize() {
     if (ctx) {
         if constexpr (debug) Debug.Log("LibUsbHandler initialized successfully.");
         return true;
-    } else {
-        Debug.Error("LibUsbHandler initialization failed: context is null.");
-        return false;
     }
+
+    Debug.Error("LibUsbHandler initialization failed: context is null.");
+    return false;
 }
 
 bool LibUsbHandler::shutdown() {
@@ -29,7 +24,8 @@ bool LibUsbHandler::shutdown() {
 }
 
 std::vector<LibUsbHandler::ScannedDeviceInfo> LibUsbHandler::scanDevices() {
-    if(!ctx) { Debug.Error("LibUsbHandler scanDevices called but context is null."); return {}; }
+    if (!ctx) if (!attemptReinitialize()){Debug.Error("LibUsbHandler scanDevices called but context is null after re-initialization."); return {}; }
+
     libusb_device **list;
     ssize_t cnt = libusb_get_device_list(ctx, &list);
     if (cnt < 0) { 
@@ -62,5 +58,20 @@ bool LibUsbHandler::deviceMatch(std::unique_ptr<LibUsbHandler::ScannedDeviceInfo
     usbComponent.deviceInfo.busNumber = libusb_get_bus_number(info->device);
     int r = libusb_open(info->device, &usbComponent.deviceHandle);
     if (r < 0) { Debug.Error("Failed to open USB device: " , r); return false; }
+    return true;
+}
+
+bool LibUsbHandler::attemptReinitialize() {
+    Debug.Warn("LibUsbHandler scanDevices called but context is null. Attempting re-initialization...");
+    if (ctx) {
+        Debug.Log("LibUsbHandler context is already initialized.");
+        return true;
+    }
+    int r = libusb_init(&ctx);
+    if (r < 0) {
+        Debug.Error("Failed to re-initialize libusb: " , r);
+        return false;
+    }
+    Debug.Log("LibUsbHandler re-initialized successfully.");
     return true;
 }

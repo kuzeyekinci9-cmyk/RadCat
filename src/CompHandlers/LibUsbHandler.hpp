@@ -43,10 +43,13 @@ public:
             }
             return *this;
         }
+
+
     };
 
     //Libusb methods
     std::vector<ScannedDeviceInfo> scanDevices();
+    bool attemptReinitialize();
     bool deviceMatch(std::unique_ptr<LibUsbHandler::ScannedDeviceInfo>& info, UsbConnection& usbComponent);
     bool openDevice(libusb_device_handle** handle, uint16_t vendorID, uint16_t productID);
     void closeDevice(libusb_device_handle* handle);
@@ -55,5 +58,8 @@ public:
 
 private:
     libusb_context* ctx = nullptr;
-    LibUsbHandler();
+    LibUsbHandler(){
+    int r = libusb_init(&ctx);
+    if (r < 0) Debug.Error("Failed to initialize libusb: " , r);
+    }
 };
